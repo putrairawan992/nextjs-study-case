@@ -170,6 +170,8 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600">
+     
+     {isLoading ? <Loading /> :
       <main className="rounded-lg bg-white p-8 shadow-lg w-full max-w-full lg:w-2/3 xl:w-3/4 mt-8 mb-8">
         <div style={{ textAlign: 'center' }}>
           <h1 className="text-2xl mb-4 text-black">User Details</h1>
@@ -188,7 +190,7 @@ const Home: React.FC = () => {
                     <th className="px-4 py-2 text-black">Actions</th>
                   </tr>
                 </thead>
-                {isLoading ? <Loading /> : <tbody>
+                <tbody>
                   {users.map((user, index) => (
                     <tr key={user.id} className="hover:bg-gray-100">
                       <td className="border px-4 py-2 text-black text-center">{index + 1}</td>
@@ -204,8 +206,9 @@ const Home: React.FC = () => {
                       </td>
                     </tr>
                   ))}
-                </tbody>}
+                </tbody>
               </table>
+            
             </div>
           </div>
         </div>
@@ -214,7 +217,7 @@ const Home: React.FC = () => {
             {alertMessage}
           </div>
         )}
-      </main>
+      </main>}
       {isUpdateFormVisible && (
         <UpdateForm
           user={selectedUser}
