@@ -165,12 +165,13 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600">
-      <main className="rounded-lg bg-white p-8 shadow-lg w-full max-w-full lg:w-2/3 xl:w-3/4 mt-8 mb-8">
-        <div style={{ textAlign: 'center' }}>
-          <h1 className="text-2xl mb-4 text-black">User Details</h1>
-        </div>
-        <div className="overflow-x-auto">
-          <div className="w-full overflow-x-auto">
+    <main className="rounded-lg bg-white p-8 shadow-lg w-full max-w-full lg:w-2/3 xl:w-3/4 mt-8 mb-8">
+      <div style={{ textAlign: 'center' }}>
+        <h1 className="text-2xl mb-4 text-black">User Details</h1>
+      </div>
+      <div className="overflow-x-auto">
+        <div className="w-full overflow-x-auto">
+          <div className="shadow-md overflow-x-auto">
             <table className="table-auto w-full">
               <thead>
                 <tr className="bg-gray-200">
@@ -202,20 +203,22 @@ const Home: React.FC = () => {
             </table>
           </div>
         </div>
-        {alertMessage && (
-          <div className="alert text-[#991b1b]" style={{ textAlign: 'center' }}>
-            {alertMessage}
-          </div>
-        )}
-      </main>
-      {isUpdateFormVisible && (
-        <UpdateForm
-          user={selectedUser}
-          onUpdate={handleUpdateUser}
-          onClose={handleCloseForm}
-        />
+      </div>
+      {alertMessage && (
+        <div className="alert text-[#991b1b]" style={{ textAlign: 'center' }}>
+          {alertMessage}
+        </div>
       )}
-    </div>
+    </main>
+    {isUpdateFormVisible && (
+      <UpdateForm
+        user={selectedUser}
+        onUpdate={handleUpdateUser}
+        onClose={handleCloseForm}
+      />
+    )}
+  </div>
+  
   );
 };
 
