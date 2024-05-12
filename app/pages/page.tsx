@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { useRouter } from 'next/navigation';
+import { Loading } from '../components/loading';
 
 interface User {
   id: number;
@@ -83,6 +84,7 @@ const Home: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isUpdateFormVisible, setUpdateFormVisible] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -90,8 +92,10 @@ const Home: React.FC = () => {
   }, []);
 
   const fetchUsers = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(`${process.env.API_SERVICE}/getusers`);
+      setIsLoading(false);
       if (response.ok) {
         const data = await response.json();
         if (data?.length < 1) {
@@ -102,6 +106,7 @@ const Home: React.FC = () => {
         console.error('Failed to fetch users:', response.statusText);
       }
     } catch (error) {
+      setIsLoading(false);
       console.error('Error fetching users:', error);
     }
   };
@@ -165,60 +170,60 @@ const Home: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-400 to-purple-600">
-    <main className="rounded-lg bg-white p-8 shadow-lg w-full max-w-full lg:w-2/3 xl:w-3/4 mt-8 mb-8">
-      <div style={{ textAlign: 'center' }}>
-        <h1 className="text-2xl mb-4 text-black">User Details</h1>
-      </div>
-      <div className="overflow-x-auto">
-        <div className="w-full overflow-x-auto">
-          <div className="shadow-md overflow-x-auto">
-            <table className="table-auto w-full">
-              <thead>
-                <tr className="bg-gray-200">
-                  <th className="px-4 py-2 text-black">S.No</th>
-                  <th className="px-4 py-2 text-black">First Name</th>
-                  <th className="px-4 py-2 text-black">Last Name</th>
-                  <th className="px-4 py-2 text-black">Email</th>
-                  <th className="px-4 py-2 text-black">Phone Number</th>
-                  <th className="px-4 py-2 text-black">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((user, index) => (
-                  <tr key={user.id} className="hover:bg-gray-100">
-                    <td className="border px-4 py-2 text-black text-center">{index + 1}</td>
-                    <td className="border px-4 py-2 text-black text-center">{user.firstName}</td>
-                    <td className="border px-4 py-2 text-black text-center">{user.lastName}</td>
-                    <td className="border px-4 py-2 text-black text-center">{user.email}</td>
-                    <td className="border px-4 py-2 text-black text-center">{user.phoneNumber}</td>
-                    <td className="border px-4 py-2 text-black text-center">
-                      <div className="flex justify-center space-x-4">
-                        <button onClick={() => handleUpdate(user)} className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">Update</button>
-                        <button onClick={() => handleDelete(user.email)} className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600">Delete</button>
-                      </div>
-                    </td>
+      <main className="rounded-lg bg-white p-8 shadow-lg w-full max-w-full lg:w-2/3 xl:w-3/4 mt-8 mb-8">
+        <div style={{ textAlign: 'center' }}>
+          <h1 className="text-2xl mb-4 text-black">User Details</h1>
+        </div>
+        <div className="overflow-x-auto">
+          <div className="w-full overflow-x-auto">
+            <div className="shadow-md overflow-x-auto">
+              <table className="table-auto w-full">
+                <thead>
+                  <tr className="bg-gray-200">
+                    <th className="px-4 py-2 text-black">S.No</th>
+                    <th className="px-4 py-2 text-black">First Name</th>
+                    <th className="px-4 py-2 text-black">Last Name</th>
+                    <th className="px-4 py-2 text-black">Email</th>
+                    <th className="px-4 py-2 text-black">Phone Number</th>
+                    <th className="px-4 py-2 text-black">Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                {isLoading ? <Loading /> : <tbody>
+                  {users.map((user, index) => (
+                    <tr key={user.id} className="hover:bg-gray-100">
+                      <td className="border px-4 py-2 text-black text-center">{index + 1}</td>
+                      <td className="border px-4 py-2 text-black text-center">{user.firstName}</td>
+                      <td className="border px-4 py-2 text-black text-center">{user.lastName}</td>
+                      <td className="border px-4 py-2 text-black text-center">{user.email}</td>
+                      <td className="border px-4 py-2 text-black text-center">{user.phoneNumber}</td>
+                      <td className="border px-4 py-2 text-black text-center">
+                        <div className="flex justify-center space-x-4">
+                          <button onClick={() => handleUpdate(user)} className="bg-blue-500 text-white px-2 py-1 rounded-md hover:bg-blue-600">Update</button>
+                          <button onClick={() => handleDelete(user.email)} className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-600">Delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>}
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-      {alertMessage && (
-        <div className="alert text-[#991b1b]" style={{ textAlign: 'center' }}>
-          {alertMessage}
-        </div>
+        {alertMessage && (
+          <div className="alert text-[#991b1b]" style={{ textAlign: 'center' }}>
+            {alertMessage}
+          </div>
+        )}
+      </main>
+      {isUpdateFormVisible && (
+        <UpdateForm
+          user={selectedUser}
+          onUpdate={handleUpdateUser}
+          onClose={handleCloseForm}
+        />
       )}
-    </main>
-    {isUpdateFormVisible && (
-      <UpdateForm
-        user={selectedUser}
-        onUpdate={handleUpdateUser}
-        onClose={handleCloseForm}
-      />
-    )}
-  </div>
-  
+    </div>
+
   );
 };
 
