@@ -59,7 +59,7 @@ const UpdateForm: React.FC<UpdateFormProps> = ({ user, onUpdate, onClose }) => {
                 <ErrorMessage name="lastName" component="p" className="text-red-500" />
               </label>
               <label className="block mb-2 text-black">
-                Email: <Field type="text" disabled={true} className="border rounded-md text-black px-4 py-2 w-full" name="email" /> 
+                Email: <Field type="text" disabled={true} className="border rounded-md text-black px-4 py-2 w-full" name="email" />
               </label>
               <label className="block mb-2 text-black">
                 Phone Number:
@@ -89,11 +89,13 @@ const Home: React.FC = () => {
     fetchUsers();
   }, []);
 
-  useEffect(()=>{
-    if (users?.length < 1) {
-      router.push('/'); 
-    }
-  },[users])
+  useEffect(() => {
+    setTimeout(() => {
+      if (!!users && users?.length < 1) {
+        router.push('/');
+      }
+    }, 5000)
+  }, [users])
 
   const fetchUsers = async () => {
     try {
@@ -150,8 +152,8 @@ const Home: React.FC = () => {
         method: 'DELETE',
       });
       const responseJson = await response.json();
-      console.log("responseJson",response,responseJson);
-      
+      console.log("responseJson", response, responseJson);
+
       if (response.ok) {
         const updatedUsers = users.filter(user => user.email !== email);
         setUsers(updatedUsers);
