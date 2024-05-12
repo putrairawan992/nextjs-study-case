@@ -89,21 +89,14 @@ const Home: React.FC = () => {
     fetchUsers();
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (!!users && users?.length < 1) {
-        router.push('/');
-      } else {
-        return;
-      }
-    }, 5000)
-  }, [users])
-
   const fetchUsers = async () => {
     try {
       const response = await fetch(`${process.env.API_SERVICE}/getusers`);
       if (response.ok) {
         const data = await response.json();
+        if (data?.length < 1) {
+          router.push('/');
+        }
         setUsers(data);
       } else {
         console.error('Failed to fetch users:', response.statusText);
