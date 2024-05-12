@@ -93,6 +93,8 @@ const Home: React.FC = () => {
     setTimeout(() => {
       if (!!users && users?.length < 1) {
         router.push('/');
+      } else {
+        return;
       }
     }, 5000)
   }, [users])
